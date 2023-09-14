@@ -1,0 +1,54 @@
+[
+  {
+    "title": "White",
+    "link": "/colors/white",
+    "displayArt": { "cardName": "swords to plowshares", "cardSet": "ema" },
+    "bgCards": [
+      { "cardName": "thraben inspector" },
+      { "cardName": "thalia, guardian of thraben" },
+      { "cardName": "armageddon" }
+    ]
+  },
+  {
+    "title": "Blue",
+    "link": "/colors/blue",
+    "displayArt": { "cardName": "counterspell", "cardSet": "ema" },
+    "bgCards": [
+      { "cardName": "preordain" },
+      { "cardName": "thassas oracle" },
+      { "cardName": "as foretold" }
+    ]
+  },
+  {
+    "title": "Black",
+    "link": "/colors/black",
+    "displayArt": { "cardName": "thoughtseize" },
+    "bgCards": [
+      { "cardName": "fatal push" },
+      { "cardName": "dark confidant" },
+      { "cardName": "necropotence" }
+    ]
+  },
+  {
+    "title": "Red",
+    "link": "/colors/red",
+    "displayArt": { "cardName": "fiery emancipation" },
+    "bgCards": [{ "cardName": "goblin guide" }, { "cardName": "searing blaze" }]
+  },
+  {
+    "title": "Green",
+    "link": "/colors/green",
+    "displayArt": { "cardName": "craterhoof behemoth" },
+    "bgCards": [{ "cardName": "Elvish Mystic" }]
+  },
+  {
+    "title": "colorless",
+    "link": "/colors/colorless",
+    "displayArt": { "cardName": "warping wail" },
+    "bgCards": [
+      { "cardName": "sol ring" },
+      { "cardName": "mind stone" },
+      { "cardName": "wastes" }
+    ]
+  }
+]
