@@ -8,33 +8,33 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 
 const dataFolderPath = path.join(__dirname, "data");
-const defaultFileName = "index"; // Set the default filename to "index"
 
-app.get("/api/data/:folder/:filename?", (req, res) => {
-  const { folder, filename } = req.params;
+app.get("/api/data/*", (req, res) => {
+  const urlSegments = req.url.split("/").filter(Boolean);
+  const folderPath = path.join(dataFolderPath, ...urlSegments);
+  const indexPath = path.join(folderPath, "index.json");
 
-  // Determine the actual filename based on the provided filename or use the default
-  const requestedFileName = filename || defaultFileName;
-  const filePath = path.join(
-    dataFolderPath,
-    folder,
-    `${requestedFileName}.json`
-  );
-
-  // Check if the file exists before reading it
-  fs.access(filePath, fs.constants.F_OK, (err) => {
+  // Check if the requested folder exists
+  fs.access(folderPath, fs.constants.F_OK, (err) => {
     if (err) {
-      return res.status(404).json({ error: "Data not found" });
+      return res.status(404).json({ error: "Folder not found" });
     }
 
-    // Read and send the JSON data
-    fs.readFile(filePath, "utf8", (err, data) => {
+    // Check if the index.json file exists in the folder
+    fs.access(indexPath, fs.constants.F_OK, (err) => {
       if (err) {
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(404).json({ error: "Data not found" });
       }
 
-      const jsonData = JSON.parse(data);
-      res.json(jsonData);
+      // Read and send the JSON data from the index.json file
+      fs.readFile(indexPath, "utf8", (err, data) => {
+        if (err) {
+          return res.status(500).json({ error: "Internal server error" });
+        }
+
+        const jsonData = JSON.parse(data);
+        res.json(jsonData);
+      });
     });
   });
 });
