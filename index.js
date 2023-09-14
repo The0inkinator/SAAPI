@@ -15,7 +15,7 @@ app.get("/api/data/:folder/:filename", (req, res) => {
 
   fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
-      return res.status(404).json({ error: "data not found" });
+      return res.status(404).json({ error: "Data not found" }); // Corrected status code
     }
 
     const jsonData = JSON.parse(data);
