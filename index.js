@@ -8,10 +8,18 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 
 const dataFolderPath = path.join(__dirname, "data");
+const defaultFileName = "index"; // Set the default filename to "index"
 
-app.get("/api/data/:folder/:filename", (req, res) => {
+app.get("/api/data/:folder/:filename?", (req, res) => {
   const { folder, filename } = req.params;
-  const filePath = path.join(dataFolderPath, folder, `${filename}.json`);
+
+  // Determine the actual filename based on the provided filename or use the default
+  const requestedFileName = filename || defaultFileName;
+  const filePath = path.join(
+    dataFolderPath,
+    folder,
+    `${requestedFileName}.json`
+  );
 
   // Check if the file exists before reading it
   fs.access(filePath, fs.constants.F_OK, (err) => {
