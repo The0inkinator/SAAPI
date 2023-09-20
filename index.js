@@ -18,23 +18,24 @@ const client = new Client({
 client.connect(); // Connect to the database
 
 app.get("/api/data/", async (req, res) => {
-  try {
-    // Define your SQL query based on your database schema
-    const query = "SELECT * FROM satesttable"; // Customize the query as needed
+  res.send("hello");
+  // try {
+  //   // Define your SQL query based on your database schema
+  //   const query = "SELECT * FROM satesttable"; // Customize the query as needed
 
-    // Execute the SQL query
-    const result = await client.query(query);
+  //   // Execute the SQL query
+  //   const result = await client.query(query);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Data not found" });
-    }
+  //   if (result.rows.length === 0) {
+  //     return res.status(404).json({ error: "Data not found" });
+  //   }
 
-    // Send the retrieved data as a JSON response
-    res.json(result.rows);
-  } catch (error) {
-    console.error("Error querying the database:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+  //   // Send the retrieved data as a JSON response
+  //   res.json(result.rows);
+  // } catch (error) {
+  //   console.error("Error querying the database:", error);
+  //   res.status(500).json({ error: "Internal server error" });
+  // }
 });
 
 app.listen(port, () => {
