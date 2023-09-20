@@ -31,7 +31,9 @@ app.get("/api/data/", (req, res) => {
   if (client && client.isConnected) {
     res.send(true); // Send 'true' if connected
   } else {
-    res.send(false); // Send 'false' if not connected
+    res.send(
+      "postgres://wenzitrhfbdowm:71f569a7498666093ed5fded6345fc7f3af47c761726d98c888f0e9558817433@ec2-34-236-103-63.compute-1.amazonaws.com:5432/d2acbcolfb7qh7"
+    ); // Send 'false' if not connected
   }
 });
 
