@@ -1,53 +1,40 @@
 const express = require("express");
 const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
+const { Client } = require("pg");
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors());
 
-const dataFolderPath = path.join(__dirname, "data");
+// Use the Heroku-provided DATABASE_URL
+const databaseUrl = process.env.DATABASE_URL; // This will be automatically set by Heroku
 
-app.get("/api/data/:path(*)", (req, res) => {
-  const { path: filePath } = req.params;
-  const requestedFilePath = path.join(dataFolderPath, filePath);
+// Create a PostgreSQL client
+const client = new Client({
+  connectionString: databaseUrl,
+  ssl: { rejectUnauthorized: false }, // Add this line for Heroku PostgreSQL
+});
 
-  // Check if the requested path points to a directory
-  if (
-    fs.existsSync(requestedFilePath) &&
-    fs.statSync(requestedFilePath).isDirectory()
-  ) {
-    // If it's a directory, try serving an "index.json" file from within the directory
-    const indexPath = path.join(requestedFilePath, "index.json");
-    if (fs.existsSync(indexPath)) {
-      return fs.readFile(indexPath, "utf8", (err, data) => {
-        if (err) {
-          return res.status(500).json({ error: "Internal server error" });
-        }
-        const jsonData = JSON.parse(data);
-        res.json(jsonData);
-      });
-    }
-  }
+client.connect(); // Connect to the database
 
-  // If it's not a directory or no "index.json" is found, try serving the path with ".json" extension
-  const jsonFilePath = requestedFilePath + ".json";
+app.get("/api/data/", async (req, res) => {
+  try {
+    // Define your SQL query based on your database schema
+    const query = "SELECT * FROM satesttable"; // Customize the query as needed
 
-  fs.access(jsonFilePath, fs.constants.F_OK, (err) => {
-    if (err) {
+    // Execute the SQL query
+    const result = await client.query(query);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: "Data not found" });
     }
 
-    fs.readFile(jsonFilePath, "utf8", (err, data) => {
-      if (err) {
-        return res.status(500).json({ error: "Internal server error" });
-      }
-
-      const jsonData = JSON.parse(data);
-      res.json(jsonData);
-    });
-  });
+    // Send the retrieved data as a JSON response
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error querying the database:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(port, () => {

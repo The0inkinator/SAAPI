@@ -1,13 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const { Client } = require("pg"); // Import the PostgreSQL Client class
+const { Client } = require("pg");
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors());
 
-// PostgreSQL connection URL
-const databaseUrl = "postgres://wenzitrhfbdowm:..."; // Replace with your database URL
+// Use the Heroku-provided DATABASE_URL
+const databaseUrl = process.env.DATABASE_URL; // This will be automatically set by Heroku
 
 // Create a PostgreSQL client
 const client = new Client({
@@ -17,22 +17,20 @@ const client = new Client({
 
 client.connect(); // Connect to the database
 
-app.get("/api/data/:path(*)", async (req, res) => {
-  const { path: filePath } = req.params;
-
+app.get("/api/data/", async (req, res) => {
   try {
-    // Define your SQL query based on the request URL
-    const query = `SELECT * FROM your_table WHERE path = $1`; // Customize the query as needed
+    // Define your SQL query based on your database schema
+    const query = "SELECT * FROM satesttable"; // Customize the query as needed
 
     // Execute the SQL query
-    const result = await client.query(query, [filePath]);
+    const result = await client.query(query);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Data not found" });
     }
 
-    // Send the retrieved data as JSON response
-    res.json(result.rows[0]);
+    // Send the retrieved data as a JSON response
+    res.json(result.rows);
   } catch (error) {
     console.error("Error querying the database:", error);
     res.status(500).json({ error: "Internal server error" });
