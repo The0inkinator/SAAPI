@@ -30,7 +30,7 @@ app.get("/api/data/", (req, res) => {
   if (client && client.isConnected) {
     res.send(true); // Send 'true' if connected
   } else {
-    res.send(false, databaseUrl); // Send 'false' if not connected
+    res.send(false); // Send 'false' if not connected
   }
 });
 
