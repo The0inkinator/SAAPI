@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
 const app = express();
 const { Client } = require("pg");
 const port = process.env.PORT || 3001;
@@ -17,10 +15,23 @@ const client = new Client({
   ssl: { rejectUnauthorized: false }, // Add this line for Heroku PostgreSQL
 });
 
-client.connect(); // Connect to the database
+// Attempt to connect to the database
+client
+  .connect()
+  .then(() => {
+    console.log("Connected to the database");
+  })
+  .catch((err) => {
+    console.error("Error connecting to the database:", err);
+  });
 
 app.get("/api/data/", (req, res) => {
-  res.send("hello");
+  // Check if the client is connected to the database
+  if (client && client.isConnected) {
+    res.send(true); // Send 'true' if connected
+  } else {
+    res.send(false); // Send 'false' if not connected
+  }
 });
 
 app.listen(port, () => {
