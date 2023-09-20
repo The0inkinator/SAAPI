@@ -22,10 +22,10 @@ let connectionResult = false;
 client
   .connect()
   .then(() => {
-    console.log("Connected to the database");
+    let connectionResult = true;
   })
   .catch((err) => {
-    console.error("Error connecting to the database:", err);
+    let connectionResult = err;
   });
 
 app.get("/api/data/", (req, res) => {
