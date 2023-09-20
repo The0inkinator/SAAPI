@@ -22,10 +22,10 @@ let connectionResult = false;
 client
   .connect()
   .then(() => {
-    let connectionResult = true;
+    connectionResult = true;
   })
   .catch((err) => {
-    let connectionResult = err;
+    connectionResult = err;
   });
 
 app.get("/api/data/", (req, res) => {
