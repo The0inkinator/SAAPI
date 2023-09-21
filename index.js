@@ -31,9 +31,16 @@ connectToDatabase();
 app.get("/api/data/", async (req, res) => {
   // Check if the client is connected to the database
   if (client && client._ending === false) {
-    res.send("client connected");
+    try {
+      // Query a table from the database (replace 'your_table' with your actual table name)
+      const queryResult = await client.query("SELECT * FROM your_table");
+      res.json(queryResult.rows);
+    } catch (err) {
+      console.error("Error querying the database:", err);
+      res.status(500).json({ error: "Error querying the database" });
+    }
   } else {
-    res.send("client not connected"); // Send a message if not connected
+    res.status(500).json({ error: "Client not connected to the database" });
   }
 });
 
