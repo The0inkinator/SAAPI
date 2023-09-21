@@ -28,12 +28,13 @@ async function connectToDatabase() {
 // Call the connectToDatabase function to establish the connection
 connectToDatabase();
 
-app.get("/api/data/", async (req, res) => {
+app.get("/tables/:table_name", async (req, res) => {
+  const tableName = req.params.table_name;
   // Check if the client is connected to the database
   if (client && client._ending === false) {
     try {
       // Query a table from the database (replace 'your_table' with your actual table name)
-      const queryResult = await client.query("SELECT * FROM binder_map");
+      const queryResult = await client.query(`SELECT * FROM ${tableName}`);
       res.json(queryResult.rows);
     } catch (err) {
       console.error("Error querying the database:", err);
