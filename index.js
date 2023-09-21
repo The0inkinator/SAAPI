@@ -21,7 +21,7 @@ let connectionResult = false;
 client
   .connect()
   .then(() => {
-    connectionResult = true;
+    connectionResult = "connection is true";
   })
   .catch((err) => {
     connectionResult = err;
