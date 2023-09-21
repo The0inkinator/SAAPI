@@ -33,7 +33,7 @@ app.get("/api/data/", async (req, res) => {
   if (client && client._ending === false) {
     try {
       // Query a table from the database (replace 'your_table' with your actual table name)
-      const queryResult = await client.query("SELECT * FROM your_table");
+      const queryResult = await client.query("SELECT * FROM satesttable");
       res.json(queryResult.rows);
     } catch (err) {
       console.error("Error querying the database:", err);
