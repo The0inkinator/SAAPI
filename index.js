@@ -28,17 +28,29 @@ async function connectToDatabase() {
 // Call the connectToDatabase function to establish the connection
 connectToDatabase();
 
-app.get("/tables/:table_name", async (req, res) => {
+app.get("/tables/:table_name/:column_name?", async (req, res) => {
   const tableName = req.params.table_name;
+  const columnName = req.params.column_name;
   // Check if the client is connected to the database
   if (client && client._ending === false) {
-    try {
-      // Query a table from the database (replace 'your_table' with your actual table name)
-      const queryResult = await client.query(`SELECT * FROM ${tableName}`);
-      res.json(queryResult.rows);
-    } catch (err) {
-      console.error("Error querying the database:", err);
-      res.status(500).json({ error: "Error querying the database" });
+    if (columnName) {
+      try {
+        const queryResult = await client.query(
+          `SELECT ${columnName} FROM ${tableName}`
+        );
+        res.json(queryResult.rows);
+      } catch (err) {
+        console.error("Error querying the database:", err);
+        res.status(500).json({ error: "Error querying the database" });
+      }
+    } else {
+      try {
+        const queryResult = await client.query(`SELECT * FROM ${tableName}`);
+        res.json(queryResult.rows);
+      } catch (err) {
+        console.error("Error querying the database:", err);
+        res.status(500).json({ error: "Error querying the database" });
+      }
     }
   } else {
     res.status(500).json({ error: "Client not connected to the database" });
