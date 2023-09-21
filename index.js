@@ -69,7 +69,9 @@ app.get(
       if (whereName && whereValue) {
         try {
           const queryResult = await client.query(
-            `SELECT ${columnName} FROM ${tableName} WHERE ${whereName} = ${whereValue}`
+            `SELECT ${decodeURI(columnName)} FROM ${decodeURI(
+              tableName
+            )} WHERE ${decodeURI(whereName)} = ${decodeURI(whereValue)}`
           );
           res.json(queryResult.rows);
         } catch (err) {
