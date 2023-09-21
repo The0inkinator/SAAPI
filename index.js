@@ -57,6 +57,42 @@ app.get("/tables/:table_name/:column_name?", async (req, res) => {
   }
 });
 
+app.get(
+  "/query/:table_name/:column_name/:where_name?/:where_value?",
+  async (req, res) => {
+    const tableName = req.params.table_name;
+    const columnName = req.params.column_name;
+    const whereName = req.params.where_name;
+    const whereValue = req.params.where_value;
+    // Check if the client is connected to the database
+    if (client && client._ending === false) {
+      if (whereName && whereValue) {
+        try {
+          const queryResult = await client.query(
+            `SELECT ${columnName} FROM ${tableName} WHERE ${whereName} = ${whereValue}`
+          );
+          res.json(queryResult.rows);
+        } catch (err) {
+          console.error("Error querying the database:", err);
+          res.status(500).json({ error: "Error querying the database" });
+        }
+      } else {
+        try {
+          const queryResult = await client.query(
+            `SELECT ${columnName} FROM ${tableName}`
+          );
+          res.json(queryResult.rows);
+        } catch (err) {
+          console.error("Error querying the database:", err);
+          res.status(500).json({ error: "Error querying the database" });
+        }
+      }
+    } else {
+      res.status(500).json({ error: "Client not connected to the database" });
+    }
+  }
+);
+
 app.listen(port, () => {
   console.log(`API server is running on port ${port}`);
 });
