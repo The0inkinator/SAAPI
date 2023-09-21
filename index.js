@@ -27,10 +27,23 @@ client
     connectionResult = err;
   });
 
-app.get("/api/data/", (req, res) => {
+app.get("/api/data/", async (req, res) => {
   // Check if the client is connected to the database
   if (client && client.isConnected) {
-    res.send(true); // Send 'true' if connected
+    res.send(true);
+    // try {
+    //   const query = "SELECT * FROM satesttable";
+
+    //   const result = await client.query(query);
+
+    //   if (result.rows.length === 0) {
+    //     return res.status(404).json({ error: "Data not found" });
+    //   }
+
+    //   res.json(result.rows);
+    // } catch (err) {
+    //   res.send(err);
+    // }
   } else {
     res.send(connectionResult); // Send 'false' if not connected
   }
