@@ -64,7 +64,6 @@ app.get(
     const columnName = req.params.column_name;
     const whereName = req.params.where_name;
     const whereValue = req.params.where_value;
-    // Check if the client is connected to the database
     if (client && client._ending === false) {
       if (whereName && whereValue) {
         try {
