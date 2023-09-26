@@ -3,7 +3,7 @@ const cors = require("cors");
 const { Client } = require("pg");
 const app = express();
 const port = process.env.PORT || 3001;
-//update connection 2
+//update connection 3
 
 app.use(cors());
 
